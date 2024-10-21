@@ -1,13 +1,14 @@
 import { FC } from 'react';
-import AppHeader from '../AppHeader/';
+import AppHeader from '../AppHeader/AppHeader';
+import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 
 const App:FC = () => {
-	return (
-		<div>
-		  <AppHeader />
-		</div>
-
-	)
+  return (
+    <>
+      <AppHeader />
+      <BurgerIngredients />
+    </>
+  )
 };
 
 export default App;

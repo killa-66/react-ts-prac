@@ -1,0 +1,30 @@
+.header_body {
+	display: flex;
+	align-items: center;
+  justify-content: space-around;
+	background-color: #1C1C21;
+	min-height: 88px;
+  margin: 0;
+  width: 100vw;
+}
+
+.button_header {
+  color: #F2F2F3;
+}
+
+.menu_list {
+	display: flex;
+	align-items: center;
+}
+
+.menu_item {
+	display: flex;
+	align-items: center;
+	margin-right: 8px;
+}
+
+.logo_container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
