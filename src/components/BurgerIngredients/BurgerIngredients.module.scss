@@ -1,6 +1,44 @@
-.ingredients_body {
+section {
+  width: 600px;
+}
+
+.ingredientsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 300px);
+  max-width: 880px;
+  row-gap: 20px;
+  column-gap: 17px;
+  margin: 51px auto 0;
+}
+
+.ingredientsContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ingredientsContainer::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.ingredientsContainer::-webkit-scrollbar-track {
+  background-color: #131316;
+}
+
+.navigationButtons {
   display: flex;
-  flex-direction: column;
-  align-self: center;
-  margin: 0;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.navigationButtons button {
+  background-color: #131316;
+  color: #f2f2f3;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.navigationButtons button:hover {
+  background-color: #4c4cff;
 }
