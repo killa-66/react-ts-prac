@@ -1,7 +1,7 @@
 .header_body {
 	display: flex;
 	align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 	background-color: #1C1C21;
 	min-height: 88px;
   margin: 0;
@@ -24,7 +24,5 @@
 }
 
 .logo_container {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-right: 180px;
 }
