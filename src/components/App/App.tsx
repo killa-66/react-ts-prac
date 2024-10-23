@@ -30,10 +30,12 @@ const App: FC = () => {
       try {
         const response = await fetch(API_URL);
         if (!response.ok) {
-          throw new Error(`Ошибка: ${response.status} - ${response.statusText}`);
+          throw new Error(
+            `Ошибка: ${response.status} - ${response.statusText}`
+          );
         }
         const data = await response.json();
-        setIngredients(data.data); // Используем `data.data` если API возвращает данные в этом поле
+        setIngredients(data.data);
       } catch (err: any) {
         setError(err.message);
       } finally {
