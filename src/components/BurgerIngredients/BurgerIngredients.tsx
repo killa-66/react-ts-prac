@@ -9,15 +9,15 @@ interface Props {
 }
 
 const BurgerIngredients: FC<Props> = ({ ingredients }) => {
-  const [selectedBun, setSelectedBun] = useState<string | null>(null);
-  const [selectedSauce, setSelectedSauce] = useState<string | null>(null);
-  const [selectedFilling, setSelectedFilling] = useState<string | null>(null);
-  const [activeButton, setActiveButton] = useState<string>('buns');
-
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
   const fillingsRef = useRef<HTMLDivElement>(null);
 
+  const [activeButton, setActiveButton] = useState<string>('buns');
+
+  const [selectedBun, setSelectedBun] = useState<string | null>(null);
+  const [selectedSauce, setSelectedSauce] = useState<string | null>(null);
+  const [selectedFillings, setSelectedFillings] = useState<string[]>([]);
 
   const scrollToSection = (
     sectionRef: React.RefObject<HTMLDivElement>,
@@ -27,16 +27,28 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
     setActiveButton(section);
   };
 
+  const handleSelectBun = (bunId: string) => {
+    setSelectedBun(bunId);
+  };
+
+  const handleSelectSauce = (sauceId: string) => {
+    setSelectedSauce(sauceId);
+  };
+
+  const handleSelectFilling = (fillingId: string) => {
+    if (selectedFillings.includes(fillingId)) {
+      setSelectedFillings(selectedFillings.filter(id => id !== fillingId));
+    } else {
+      setSelectedFillings([...selectedFillings, fillingId]);
+    }
+  };
+
   const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
-  const sauces = ingredients.filter(
-    (ingredient) => ingredient.type === 'sauce'
-  );
-  const fillings = ingredients.filter(
-    (ingredient) => ingredient.type === 'main'
-  );
+  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce');
+  const fillings = ingredients.filter((ingredient) => ingredient.type === 'main');
 
   return (
-    <section className={styles.container}>
+    <section className={styles.page}>
       <h2 className='text text_type_main-medium pt-10 pb-5'>Соберите бургер</h2>
 
       <div className={styles.navigationButtons}>
@@ -71,13 +83,13 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
         </div>
       </div>
 
-      <div className={styles.ingredientsContainer}>
+      <div className={styles.childContainer}>
         <SectionIngredients
           sectionRef={bunsRef}
           title='Булки'
           ingredients={buns}
           selectedIngredient={selectedBun}
-          setSelectedIngredient={setSelectedBun}
+          setSelectedIngredient={handleSelectBun}
         />
 
         <SectionIngredients
@@ -85,15 +97,15 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
           title='Соусы'
           ingredients={sauces}
           selectedIngredient={selectedSauce}
-          setSelectedIngredient={setSelectedSauce}
+          setSelectedIngredient={handleSelectSauce}
         />
 
         <SectionIngredients
           sectionRef={fillingsRef}
           title='Начинки'
           ingredients={fillings}
-          selectedIngredient={selectedFilling}
-          setSelectedIngredient={setSelectedFilling}
+          selectedIngredients={selectedFillings}
+          setSelectedIngredient={handleSelectFilling}
         />
       </div>
     </section>

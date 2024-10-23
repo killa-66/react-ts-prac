@@ -1,14 +1,15 @@
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { FC, RefObject } from 'react';
 import { Ingredient } from '../../App/App';
 import styles from './SectionIngredients.module.scss';
-import { FC, RefObject } from 'react';
 import selectedImage from '../../../images/seleted.svg';
+import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 interface Props {
   sectionRef: RefObject<HTMLDivElement>;
   title: string;
   ingredients: Ingredient[];
-  selectedIngredient: string | null;
+  selectedIngredient?: string | null;
+  selectedIngredients?: string[];
   setSelectedIngredient: (id: string) => void;
 }
 
@@ -17,6 +18,7 @@ const SectionIngredients: FC<Props> = ({
   title,
   ingredients,
   selectedIngredient,
+  selectedIngredients = [],
   setSelectedIngredient,
 }) => {
   return (
@@ -26,22 +28,21 @@ const SectionIngredients: FC<Props> = ({
         {ingredients.map((ingredient) => (
           <div
             key={ingredient._id}
-            className={`${styles.ingredient} mr-4 ml-4`}
+            className={`{$styles.ingredient} mr-4 ml-4`}
             onClick={() => setSelectedIngredient(ingredient._id)}
           >
-            {selectedIngredient === ingredient._id && (
-              <img
-                src={selectedImage}
-                className={styles.selectedIngredient}
-                alt="Selected"
-              />
+            {(selectedIngredient === ingredient._id ||
+              selectedIngredients.includes(ingredient._id)) && (
+              <img src={selectedImage} className={styles.selectedIngredient} />
             )}
             <img src={ingredient.image} alt={ingredient.name} />
             <p className={`${styles.price} text text_type_main-default pb-1 pt-1`}>
               {ingredient.price}
               <CurrencyIcon type={'primary'} />
             </p>
-            <p className='text text_type_main-default pb-1 pt-1'>{ingredient.name}</p>
+            <p className='text text_type_main-default pb-1 pt-1'>
+              {ingredient.name}
+            </p>
           </div>
         ))}
       </div>
