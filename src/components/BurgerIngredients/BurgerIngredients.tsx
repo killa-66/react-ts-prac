@@ -9,11 +9,15 @@ interface Props {
 }
 
 const BurgerIngredients: FC<Props> = ({ ingredients }) => {
+  const [selectedBun, setSelectedBun] = useState<string | null>(null);
+  const [selectedSauce, setSelectedSauce] = useState<string | null>(null);
+  const [selectedFilling, setSelectedFilling] = useState<string | null>(null);
+  const [activeButton, setActiveButton] = useState<string>('buns');
+
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
   const fillingsRef = useRef<HTMLDivElement>(null);
 
-  const [activeButton, setActiveButton] = useState<string>('buns');
 
   const scrollToSection = (
     sectionRef: React.RefObject<HTMLDivElement>,
@@ -72,18 +76,24 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
           sectionRef={bunsRef}
           title='Булки'
           ingredients={buns}
+          selectedIngredient={selectedBun}
+          setSelectedIngredient={setSelectedBun}
         />
 
         <SectionIngredients
           sectionRef={saucesRef}
           title='Соусы'
           ingredients={sauces}
+          selectedIngredient={selectedSauce}
+          setSelectedIngredient={setSelectedSauce}
         />
 
         <SectionIngredients
           sectionRef={fillingsRef}
           title='Начинки'
           ingredients={fillings}
+          selectedIngredient={selectedFilling}
+          setSelectedIngredient={setSelectedFilling}
         />
       </div>
     </section>
