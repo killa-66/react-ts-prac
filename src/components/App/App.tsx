@@ -1,7 +1,8 @@
 import { FC, useState, useEffect } from 'react';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import styless from './app.module.scss';
+import styles from './app.module.scss';
+import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 
 export interface Ingredient {
   _id: string;
@@ -49,7 +50,7 @@ const App: FC = () => {
   return (
     <>
       <AppHeader />
-      <div className={styless.menu}>
+      <div className={styles.menu}>
         {loading ? (
           <p>Загрузка...</p>
         ) : error ? (
@@ -57,6 +58,7 @@ const App: FC = () => {
         ) : (
           <>
             <BurgerIngredients ingredients={ingredients} />
+            <BurgerConstructor ingredients={ingredients} />
           </>
         )}
       </div>

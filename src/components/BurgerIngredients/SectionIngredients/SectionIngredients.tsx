@@ -26,7 +26,7 @@ const SectionIngredients: FC<Props> = ({
       <h3 className='text text_type_main-medium pb-6'>{title}</h3>
       <div className={styles.ingredientsGrid}>
         {ingredients.map((ingredient) => (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           <div
             key={ingredient._id}
             className={`${styles.ingredient} mr-4 ml-4`}
