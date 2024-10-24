@@ -1,12 +1,15 @@
 import React, { FC } from 'react';
 import styles from './BurgerConstructor.module.scss';
+import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
 
-type Props = {}
 
-export default function BurgerConstructor({}: Props): FC {
+
+export default function BurgerConstructor() {
   return (
     <div className={styles.main}>
-
+      <ConstructorElement text={''} thumbnail={''} price={0} />
+      <ConstructorElement text={''} thumbnail={''} price={0} />
+      <ConstructorElement text={''} thumbnail={''} price={0} />
     </div>
-  )
-}
+  );
+};

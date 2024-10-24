@@ -26,9 +26,10 @@ const SectionIngredients: FC<Props> = ({
       <h3 className='text text_type_main-medium pb-6'>{title}</h3>
       <div className={styles.ingredientsGrid}>
         {ingredients.map((ingredient) => (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <div
             key={ingredient._id}
-            className={'{$styles.ingredient} mr-4 ml-4'}
+            className={`${styles.ingredient} mr-4 ml-4`}
             onClick={() => setSelectedIngredient(ingredient._id)}>
             {(selectedIngredient === ingredient._id ||
               selectedIngredients.includes(ingredient._id)) && (
