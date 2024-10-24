@@ -52,7 +52,7 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
   );
 
   return (
-    <section className={styles.page}>
+    <section className={`${styles.page} mr-10`}>
       <h2 className='text text_type_main-medium pt-10 pb-5'>Соберите бургер</h2>
 
       <div className={styles.navigationButtons}>

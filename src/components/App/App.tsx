@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import styles from './app.module.scss';
+import styles from './App.module.scss';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 
 export interface Ingredient {
@@ -48,7 +48,7 @@ const App: FC = () => {
   }, []);
 
   return (
-    <>
+    <div className={styles.page}>
       <AppHeader />
       <div className={styles.menu}>
         {loading ? (
@@ -62,7 +62,7 @@ const App: FC = () => {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

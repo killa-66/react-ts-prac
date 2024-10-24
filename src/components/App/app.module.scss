@@ -1,5 +1,12 @@
+.page {
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
 .menu {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 }

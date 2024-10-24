@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './BurgerConstructor.module.scss';
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../App/App';
 
 interface Props {
@@ -11,23 +11,117 @@ interface Props {
 
 const BurgerConstructor: FC<Props> = ({ ingredients }) => {
   return (
-    <div className={styles.main}>
-      <ConstructorElement
-        type='top'
-        text={`${ingredients[0].name} (верх)`}
-        thumbnail={ingredients[0].image}
-        price={ingredients[0].price}
-      />
+    <div className={`${styles.constructorSection} pt-25`}>
+        <ConstructorElement
+          type='top'
+          text={`${ingredients[0].name} (верх)`}
+          thumbnail={ingredients[0].image}
+          price={ingredients[0].price}
+          isLocked={true}
+          extraClass='mr-8 mb-4'
+        />
 
-      <ConstructorElement text={''} thumbnail={''} price={0} />
-      <ConstructorElement text={''} thumbnail={''} price={0} />
+      <div className={`${styles.ingredientSection} pr-4`}>
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[4].name}`}
+            thumbnail={ingredients[4].image}
+            price={ingredients[4].price}/>
+        </div>
 
-      <ConstructorElement
-        type='bottom'
-        text={`${ingredients[0].name} (верх)`}
-        thumbnail={ingredients[0].image}
-        price={ingredients[0].price}
-      />
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[11].name}`}
+            thumbnail={ingredients[11].image}
+            price={ingredients[11].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[10].name}`}
+            thumbnail={ingredients[10].image}
+            price={ingredients[10].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[6].name}`}
+            thumbnail={ingredients[6].image}
+            price={ingredients[6].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[9].name}`}
+            thumbnail={ingredients[9].image}
+            price={ingredients[9].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[12].name}`}
+            thumbnail={ingredients[12].image}
+            price={ingredients[12].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[12].name}`}
+            thumbnail={ingredients[12].image}
+            price={ingredients[12].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[12].name}`}
+            thumbnail={ingredients[12].image}
+            price={ingredients[12].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[12].name}`}
+            thumbnail={ingredients[12].image}
+            price={ingredients[12].price}/>
+        </div>
+
+        <div className={styles.middleItem}>
+          <DragIcon type={'primary'} />
+          <ConstructorElement
+            text={`${ingredients[12].name}`}
+            thumbnail={ingredients[12].image}
+            price={ingredients[12].price}/>
+        </div>
+      </div>
+
+        <ConstructorElement
+          type='bottom'
+          text={`${ingredients[0].name} (верх)`}
+          thumbnail={ingredients[0].image}
+          price={ingredients[0].price}
+          isLocked={true}
+          extraClass='mr-8 mt-4 mb-10'
+        />
+
+      <div className={`${styles.confirmSection} mr-8`}>
+        <p className={`${styles.totalPrice} mr-4 text text_type_main-large`}>
+          10
+          <CurrencyIcon type={'primary'} />
+        </p>
+        <Button htmlType="button" type="primary" size="large">
+          Оформить заказ
+        </Button>
+
+      </div>
     </div>
   );
 };
