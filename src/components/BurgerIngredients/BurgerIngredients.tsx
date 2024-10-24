@@ -1,7 +1,7 @@
 import { FC, useRef, useState } from 'react';
 import { Ingredient } from '../App/App';
 import styles from './BurgerIngredients.module.scss';
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import SectionIngredients from './SectionIngredients/SectionIngredients';
 
 interface Props {
@@ -37,50 +37,43 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
 
   const handleSelectFilling = (fillingId: string) => {
     if (selectedFillings.includes(fillingId)) {
-      setSelectedFillings(selectedFillings.filter(id => id !== fillingId));
+      setSelectedFillings(selectedFillings.filter((id) => id !== fillingId));
     } else {
       setSelectedFillings([...selectedFillings, fillingId]);
     }
   };
 
   const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
-  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce');
-  const fillings = ingredients.filter((ingredient) => ingredient.type === 'main');
+  const sauces = ingredients.filter(
+    (ingredient) => ingredient.type === 'sauce'
+  );
+  const fillings = ingredients.filter(
+    (ingredient) => ingredient.type === 'main'
+  );
 
   return (
     <section className={styles.page}>
       <h2 className='text text_type_main-medium pt-10 pb-5'>Соберите бургер</h2>
 
       <div className={styles.navigationButtons}>
-        <div className={activeButton === 'buns' ? styles.activeButton : ''}>
-          <Button
-            htmlType='button'
-            type='secondary'
-            size='medium'
-            onClick={() => scrollToSection(bunsRef, 'buns')}>
-            Булки
-          </Button>
-        </div>
-
-        <div className={activeButton === 'sauces' ? styles.activeButton : ''}>
-          <Button
-            htmlType='button'
-            type='secondary'
-            size='medium'
-            onClick={() => scrollToSection(saucesRef, 'sauces')}>
-            Соусы
-          </Button>
-        </div>
-
-        <div className={activeButton === 'fillings' ? styles.activeButton : ''}>
-          <Button
-            htmlType='button'
-            type='secondary'
-            size='medium'
-            onClick={() => scrollToSection(fillingsRef, 'fillings')}>
-            Начинки
-          </Button>
-        </div>
+        <Tab
+          active={activeButton === 'buns'}
+          value={'buns'}
+          onClick={() => scrollToSection(bunsRef, 'buns')}>
+          Булки
+        </Tab>
+        <Tab
+          active={activeButton === 'sauces'}
+          value={'buns'}
+          onClick={() => scrollToSection(saucesRef, 'sauces')}>
+          Соусы
+        </Tab>
+        <Tab
+          active={activeButton === 'fillings'}
+          value={'buns'}
+          onClick={() => scrollToSection(fillingsRef, 'fillings')}>
+          Начинки
+        </Tab>
       </div>
 
       <div className={styles.childContainer}>

@@ -28,15 +28,19 @@ const SectionIngredients: FC<Props> = ({
         {ingredients.map((ingredient) => (
           <div
             key={ingredient._id}
-            className={`{$styles.ingredient} mr-4 ml-4`}
-            onClick={() => setSelectedIngredient(ingredient._id)}
-          >
+            className={'{$styles.ingredient} mr-4 ml-4'}
+            onClick={() => setSelectedIngredient(ingredient._id)}>
             {(selectedIngredient === ingredient._id ||
               selectedIngredients.includes(ingredient._id)) && (
-              <img src={selectedImage} className={styles.selectedIngredient} />
+              <img
+                src={selectedImage}
+                className={styles.selectedIngredient}
+                alt='Выбранный элемент'
+              />
             )}
             <img src={ingredient.image} alt={ingredient.name} />
-            <p className={`${styles.price} text text_type_main-default pb-1 pt-1`}>
+            <p
+              className={`${styles.price} text text_type_main-default pb-1 pt-1`}>
               {ingredient.price}
               <CurrencyIcon type={'primary'} />
             </p>
