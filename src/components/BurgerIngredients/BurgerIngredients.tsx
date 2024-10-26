@@ -1,10 +1,10 @@
 import { FC, useRef, useState } from 'react';
-import { Ingredient } from '../App/App';
 import styles from './BurgerIngredients.module.scss';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import SectionIngredients from './SectionIngredients/SectionIngredients';
 import Modal from '../Modal/Modal';
 import IngredientDetails from './IngredientDetails/IngredientDetails';
+import { Ingredient } from '../../types/Ingredient';
 
 interface Props {
   ingredients: Ingredient[];
@@ -108,12 +108,7 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
       {modalIngredient && (
         <Modal title='Детали ингридиента' onClose={closeModal}>
           <IngredientDetails
-            calories={modalIngredient.calories}
-            proteins={modalIngredient.proteins}
-            fat={modalIngredient.fat}
-            carbohydrates={modalIngredient.carbohydrates}
-            img={modalIngredient.image}
-            name={modalIngredient.name} />
+            ingredient={modalIngredient}/>
         </Modal>
       )}
     </section>

@@ -3,21 +3,9 @@ import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import styles from './App.module.scss';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import { Ingredient } from '../../types/Ingredient';
 
-export interface Ingredient {
-  _id: string;
-  name: string;
-  type: string;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  calories: number;
-  price: number;
-  image: string;
-  image_mobile: string;
-  image_large: string;
-  __v: number;
-}
+
 
 const API_URL = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -50,7 +38,7 @@ const App: FC = () => {
   return (
     <div className={styles.page}>
       <AppHeader />
-      <div className={styles.menu}>
+      <main className={styles.menu}>
         {loading ? (
           <p>Загрузка...</p>
         ) : error ? (
@@ -61,7 +49,7 @@ const App: FC = () => {
             <BurgerConstructor ingredients={ingredients} />
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 };

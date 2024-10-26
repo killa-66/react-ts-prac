@@ -1,40 +1,36 @@
 import { FC } from "react";
 import styles from './IngredientDetails.module.scss'
+import { Ingredient } from "../../../types/Ingredient";
 
 interface Props {
-  calories: number;
-  proteins: number;
-  fat: number;
-  carbohydrates: number;
-  img: string;
-  name: string;
+  ingredient: Ingredient;
 }
 
 
-const IngredientDetails: FC<Props> = ({ calories, proteins, fat, carbohydrates, img, name  }) => {
+const IngredientDetails: FC<Props> = ({ ingredient  }) => {
   return (
     <div className={styles.main}>
-      <img className={styles.ingredientImage} src={img} alt={name} />
-      <p className="text text_type_main-medium mb-8">{name}</p>
+      <img className='mb-4' src={ingredient.image_large} alt={ingredient.name} />
+      <p className="text text_type_main-medium mb-8">{ingredient.name}</p>
       <div className={styles.details}>
         <div  className="text text_type_main-default">
           <p className="text text_type_main-default">Калории, ккал</p>
-          <span>{calories}</span>
+          <span>{ingredient.calories}</span>
         </div>
 
         <div  className="text text_type_main-default">
           <p className="text text_type_main-default">Белки, г</p>
-          <span>{proteins}</span>
+          <span>{ingredient.proteins}</span>
         </div>
 
         <div  className="text text_type_main-default">
           <p className="text text_type_main-default">Жиры, г</p>
-          <span>{fat}</span>
+          <span>{ingredient.fat}</span>
         </div>
 
         <div className="text text_type_main-default">
           <p className="text text_type_main-default">Углеводы, г</p>
-          <span>{carbohydrates}</span>
+          <span>{ingredient.carbohydrates}</span>
         </div>
       </div>
     </div>

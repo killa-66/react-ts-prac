@@ -1,8 +1,8 @@
 import { FC, RefObject } from 'react';
-import { Ingredient } from '../../App/App';
 import styles from './SectionIngredients.module.scss';
 import selectedImage from '../../../images/seleted.svg';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Ingredient } from '../../../types/Ingredient';
 
 interface Props {
   sectionRef: RefObject<HTMLDivElement>;
@@ -11,7 +11,7 @@ interface Props {
   selectedIngredient?: string | null;
   selectedIngredients?: string[];
   setSelectedIngredient: (id: string) => void;
-  openModal: (ingredient: Ingredient) => void;  // Добавили функцию для открытия модального окна
+  openModal: (ingredient: Ingredient) => void;
 }
 
 const SectionIngredients: FC<Props> = ({
