@@ -11,6 +11,7 @@ interface Props {
   selectedIngredient?: string | null;
   selectedIngredients?: string[];
   setSelectedIngredient: (id: string) => void;
+  openModal: (ingredient: Ingredient) => void;  // Добавили функцию для открытия модального окна
 }
 
 const SectionIngredients: FC<Props> = ({
@@ -20,6 +21,7 @@ const SectionIngredients: FC<Props> = ({
   selectedIngredient,
   selectedIngredients = [],
   setSelectedIngredient,
+  openModal,
 }) => {
   return (
     <div ref={sectionRef} className='pb-10'>
@@ -30,7 +32,10 @@ const SectionIngredients: FC<Props> = ({
           <div
             key={ingredient._id}
             className={`${styles.ingredient} mr-4 ml-4`}
-            onClick={() => setSelectedIngredient(ingredient._id)}>
+            onClick={() => {
+              setSelectedIngredient(ingredient._id);
+              openModal(ingredient);
+            }}>
             {(selectedIngredient === ingredient._id ||
               selectedIngredients.includes(ingredient._id)) && (
               <img
@@ -41,7 +46,7 @@ const SectionIngredients: FC<Props> = ({
             )}
             <img src={ingredient.image} alt={ingredient.name} />
             <p
-              className={`${styles.price} text text_type_main-default pb-1 pt-1`}>
+              className={`${styles.price} text text_type_digits-default pb-1 pt-1`}>
               {ingredient.price}
               <CurrencyIcon type={'primary'} />
             </p>

@@ -3,6 +3,8 @@ import { Ingredient } from '../App/App';
 import styles from './BurgerIngredients.module.scss';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import SectionIngredients from './SectionIngredients/SectionIngredients';
+import Modal from '../Modal/Modal';
+import IngredientDetails from './IngredientDetails/IngredientDetails';
 
 interface Props {
   ingredients: Ingredient[];
@@ -14,10 +16,8 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
   const fillingsRef = useRef<HTMLDivElement>(null);
 
   const [activeButton, setActiveButton] = useState<string>('buns');
-
-  const [selectedBun, setSelectedBun] = useState<string | null>(null);
-  const [selectedSauce, setSelectedSauce] = useState<string | null>(null);
-  const [selectedFillings, setSelectedFillings] = useState<string[]>([]);
+  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
+  const [modalIngredient, setModalIngredient] = useState<Ingredient | null>(null);
 
   const scrollToSection = (
     sectionRef: React.RefObject<HTMLDivElement>,
@@ -28,28 +28,28 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
   };
 
   const handleSelectBun = (bunId: string) => {
-    setSelectedBun(bunId);
+    setSelectedIngredient(ingredients.find((i) => i._id === bunId) || null);
   };
 
   const handleSelectSauce = (sauceId: string) => {
-    setSelectedSauce(sauceId);
+    setSelectedIngredient(ingredients.find((i) => i._id === sauceId) || null);
   };
 
   const handleSelectFilling = (fillingId: string) => {
-    if (selectedFillings.includes(fillingId)) {
-      setSelectedFillings(selectedFillings.filter((id) => id !== fillingId));
-    } else {
-      setSelectedFillings([...selectedFillings, fillingId]);
-    }
+    setSelectedIngredient(ingredients.find((i) => i._id === fillingId) || null);
+  };
+
+  const openModal = (ingredient: Ingredient) => {
+    setModalIngredient(ingredient);
+  };
+
+  const closeModal = () => {
+    setModalIngredient(null);
   };
 
   const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
-  const sauces = ingredients.filter(
-    (ingredient) => ingredient.type === 'sauce'
-  );
-  const fillings = ingredients.filter(
-    (ingredient) => ingredient.type === 'main'
-  );
+  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce');
+  const fillings = ingredients.filter((ingredient) => ingredient.type === 'main');
 
   return (
     <section className={`${styles.page} mr-10`}>
@@ -81,26 +81,41 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
           sectionRef={bunsRef}
           title='Булки'
           ingredients={buns}
-          selectedIngredient={selectedBun}
+          selectedIngredient={selectedIngredient?._id || null}
           setSelectedIngredient={handleSelectBun}
+          openModal={openModal}
         />
 
         <SectionIngredients
           sectionRef={saucesRef}
           title='Соусы'
           ingredients={sauces}
-          selectedIngredient={selectedSauce}
+          selectedIngredient={selectedIngredient?._id || null}
           setSelectedIngredient={handleSelectSauce}
+          openModal={openModal}
         />
 
         <SectionIngredients
           sectionRef={fillingsRef}
           title='Начинки'
           ingredients={fillings}
-          selectedIngredients={selectedFillings}
+          selectedIngredient={selectedIngredient?._id || null}
           setSelectedIngredient={handleSelectFilling}
+          openModal={openModal}
         />
       </div>
+
+      {modalIngredient && (
+        <Modal title='Детали ингридиента' onClose={closeModal}>
+          <IngredientDetails
+            calories={modalIngredient.calories}
+            proteins={modalIngredient.proteins}
+            fat={modalIngredient.fat}
+            carbohydrates={modalIngredient.carbohydrates}
+            img={modalIngredient.image}
+            name={modalIngredient.name} />
+        </Modal>
+      )}
     </section>
   );
 };

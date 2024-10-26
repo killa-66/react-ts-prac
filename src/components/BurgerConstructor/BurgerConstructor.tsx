@@ -1,7 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styles from './BurgerConstructor.module.scss';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../App/App';
+import Modal from '../Modal/Modal';
+import OrderDetails from './OrderDetails/OrderDetails';
 
 interface Props {
   ingredients: Ingredient[];
@@ -10,6 +12,17 @@ interface Props {
 }
 
 const BurgerConstructor: FC<Props> = ({ ingredients }) => {
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className={`${styles.constructorSection} pt-25`}>
         <ConstructorElement
@@ -113,15 +126,21 @@ const BurgerConstructor: FC<Props> = ({ ingredients }) => {
         />
 
       <div className={`${styles.confirmSection} mr-8`}>
-        <p className={`${styles.totalPrice} mr-4 text text_type_main-large`}>
+        <p className={`${styles.totalPrice} mr-4 text text_type_digits-medium`}>
           10
           <CurrencyIcon type={'primary'} />
         </p>
-        <Button htmlType="button" type="primary" size="large">
+        <Button htmlType="button" type="primary" size="large" onClick={openModal}>
           Оформить заказ
         </Button>
 
       </div>
+
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <OrderDetails />
+        </Modal>
+      )}
     </div>
   );
 };
