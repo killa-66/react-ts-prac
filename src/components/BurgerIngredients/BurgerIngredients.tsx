@@ -18,14 +18,22 @@ const BurgerIngredients: FC = () => {
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
   const fillingsRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [activeButton, setActiveButton] = useState<string>('buns');
   const [modalIngredient, setModalIngredient] = useState<Ingredient | null>(null);
 
   useEffect(() => {
     dispatch(setIngredints(data));
-  }, [data])
+  }, [data, dispatch]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    container?.addEventListener('scroll', handleScroll);
+    return () => {
+      container?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const scrollToSection = (
     sectionRef: React.RefObject<HTMLDivElement>,
@@ -33,6 +41,31 @@ const BurgerIngredients: FC = () => {
   ) => {
     sectionRef.current?.scrollIntoView({ behavior: 'smooth' });
     setActiveButton(section);
+  };
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+
+    const bunsPosition = bunsRef.current?.getBoundingClientRect().top || 0;
+    const saucesPosition = saucesRef.current?.getBoundingClientRect().top || 0;
+    const fillingsPosition = fillingsRef.current?.getBoundingClientRect().top || 0;
+
+    const containerTop = containerRef.current.getBoundingClientRect().top;
+
+    // Определяем, какой раздел ближе к верхней части контейнера
+    const bunsDistance = Math.abs(bunsPosition - containerTop);
+    const saucesDistance = Math.abs(saucesPosition - containerTop);
+    const fillingsDistance = Math.abs(fillingsPosition - containerTop);
+
+    const minDistance = Math.min(bunsDistance, saucesDistance, fillingsDistance);
+
+    if (minDistance === bunsDistance) {
+      setActiveButton('buns');
+    } else if (minDistance === saucesDistance) {
+      setActiveButton('sauces');
+    } else {
+      setActiveButton('fillings');
+    }
   };
 
   const openModal = (ingredient: Ingredient) => {
@@ -56,25 +89,25 @@ const BurgerIngredients: FC = () => {
       <div className={styles.navigationButtons}>
         <Tab
           active={activeButton === 'buns'}
-          value={'buns'}
+          value='buns'
           onClick={() => scrollToSection(bunsRef, 'buns')}>
           Булки
         </Tab>
         <Tab
           active={activeButton === 'sauces'}
-          value={'buns'}
+          value='sauces'
           onClick={() => scrollToSection(saucesRef, 'sauces')}>
           Соусы
         </Tab>
         <Tab
           active={activeButton === 'fillings'}
-          value={'buns'}
+          value='fillings'
           onClick={() => scrollToSection(fillingsRef, 'fillings')}>
           Начинки
         </Tab>
       </div>
 
-      <div className={styles.childContainer}>
+      <div className={styles.childContainer} ref={containerRef}>
         <SectionIngredients
           sectionRef={bunsRef}
           title='Булки'
@@ -99,8 +132,7 @@ const BurgerIngredients: FC = () => {
 
       {modalIngredient && (
         <Modal title='Детали ингридиента' onClose={closeModal}>
-          <IngredientDetails
-            ingredient={modalIngredient}/>
+          <IngredientDetails ingredient={modalIngredient} />
         </Modal>
       )}
     </section>

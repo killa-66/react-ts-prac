@@ -3,18 +3,19 @@ import styles from './BurgerConstructor.module.scss';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import OrderDetails from './OrderDetails/OrderDetails';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../services/store';
-import { Ingredient } from '../../types/Ingredient';
+import { IOrderResponse, useCompliteOrderMutation } from '../../services/baseApi';
 
 const BurgerConstructor: FC = () => {
-  const dispatch = useDispatch();
+  const [compliteOrder, { isLoading, error }] = useCompliteOrderMutation();
   const ingredients = useSelector((state: RootState) => state.constructorIngredients.products);
   useEffect(() => {
     console.log(ingredients)
   }, [ingredients])
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [orderData, setOrderData] = useState<IOrderResponse>();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -27,6 +28,17 @@ const BurgerConstructor: FC = () => {
     const otherIngredientsPrice = otherIngredients.reduce((sum, ingredient) => sum + ingredient.price, 0);
     return bunPrice + otherIngredientsPrice;
   }, [bun, otherIngredients]);
+
+  const handleOrder = async () => {
+    const ingredientIds = ingredients.map((ingredient) => ingredient._id);
+    try {
+      const response = await compliteOrder({ingredients: ingredientIds});
+      setOrderData(response.data);
+      openModal()
+    } catch (err) {
+      console.log('Не удалось создать заказ', err)
+    }
+  }
 
   return (
     <div className={`${styles.constructorSection} pt-20`}>
@@ -71,14 +83,14 @@ const BurgerConstructor: FC = () => {
             {totalPrice}
             <CurrencyIcon type={'primary'} />
           </p>
-          <Button htmlType="button" type="primary" size="large" onClick={openModal}>
+          <Button htmlType="button" type="primary" size="large" onClick={handleOrder}>
             Оформить заказ
           </Button>
         </div>
 
-        {isModalOpen && (
+        {(isModalOpen && orderData) && (
           <Modal onClose={closeModal}>
-            <OrderDetails />
+            <OrderDetails orderData={orderData} />
           </Modal>
         )}
       </>

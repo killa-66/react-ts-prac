@@ -17,6 +17,18 @@ export interface ServerResponse<T> {
   ]
  }
 
+ export interface IOrderRequest {
+  ingredients: string[];
+ }
+
+ export interface IOrderResponse {
+  name: string;
+  order: {
+    number: number;
+  };
+  success: boolean;
+ }
+
 export const baseApi = createApi({
     reducerPath: 'ingredients/api',
     baseQuery: fetchBaseQuery({
@@ -32,7 +44,14 @@ export const baseApi = createApi({
               return response.data
             }
         }),
+        compliteOrder: build.mutation<IOrderResponse, IOrderRequest>({
+          query: (orderRequest) => ({
+            url: 'orders',
+            method: 'POST',
+            body: orderRequest,
+          })
+        }),
     })
 })
 
-export const { useFetchIngredientsQuery } = baseApi;
+export const { useFetchIngredientsQuery, useCompliteOrderMutation } = baseApi;
