@@ -52,7 +52,6 @@ const BurgerIngredients: FC = () => {
 
     const containerTop = containerRef.current.getBoundingClientRect().top;
 
-    // Определяем, какой раздел ближе к верхней части контейнера
     const bunsDistance = Math.abs(bunsPosition - containerTop);
     const saucesDistance = Math.abs(saucesPosition - containerTop);
     const fillingsDistance = Math.abs(fillingsPosition - containerTop);
