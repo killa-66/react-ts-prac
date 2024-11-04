@@ -5,12 +5,10 @@ import SectionIngredients from './SectionIngredients/SectionIngredients';
 import Modal from '../Modal/Modal';
 import IngredientDetails from './IngredientDetails/IngredientDetails';
 import { Ingredient } from '../../types/Ingredient';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../services/store';
 
-interface Props {
-  ingredients: Ingredient[];
-}
-
-const BurgerIngredients: FC<Props> = ({ ingredients }) => {
+const BurgerIngredients: FC = () => {
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
   const fillingsRef = useRef<HTMLDivElement>(null);
@@ -18,6 +16,7 @@ const BurgerIngredients: FC<Props> = ({ ingredients }) => {
   const [activeButton, setActiveButton] = useState<string>('buns');
   const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
   const [modalIngredient, setModalIngredient] = useState<Ingredient | null>(null);
+  const ingredients = useSelector((state: RootState) => state.ingredients.items);
 
   const scrollToSection = (
     sectionRef: React.RefObject<HTMLDivElement>,
