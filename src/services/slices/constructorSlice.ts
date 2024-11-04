@@ -2,25 +2,25 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Ingredient } from '../../types/Ingredient';
 
 interface ConstructorState {
-  items: Ingredient[];
+  products: Ingredient[];
 }
 
 const initialState: ConstructorState = {
-  items: [],
+  products: [],
 };
 
 const constructorSlice = createSlice({
-  name: 'constructor',
+  name: 'constructorIngredients',
   initialState,
   reducers: {
     addIngredient(state, action: PayloadAction<Ingredient>) {
-      state.items.push(action.payload);
+      state.products.push(action.payload);
     },
     removeIngredient(state, action: PayloadAction<string>) {
-      state.items = state.items.filter(item => item._id !== action.payload);
+      state.products = state.products.filter(item => item._id !== action.payload);
     },
     clearConstructor(state) {
-      state.items = [];
+      state.products = [];
     },
   },
 });

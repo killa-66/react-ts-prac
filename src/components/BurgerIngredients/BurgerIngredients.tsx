@@ -1,22 +1,31 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './BurgerIngredients.module.scss';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import SectionIngredients from './SectionIngredients/SectionIngredients';
 import Modal from '../Modal/Modal';
 import IngredientDetails from './IngredientDetails/IngredientDetails';
 import { Ingredient } from '../../types/Ingredient';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../services/store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../services/store';
+import { setViewedIngredient } from '../../services/slices/setViewedIngredientSlice';
+import { useFetchIngredientsQuery } from '../../services/baseApi';
+import { setIngredints } from '../../services/slices/ingredientsSlice';
 
 const BurgerIngredients: FC = () => {
+  const { data } = useFetchIngredientsQuery();
+  const dispatch = useDispatch<AppDispatch>();
+
   const bunsRef = useRef<HTMLDivElement>(null);
   const saucesRef = useRef<HTMLDivElement>(null);
   const fillingsRef = useRef<HTMLDivElement>(null);
 
   const [activeButton, setActiveButton] = useState<string>('buns');
-  const [selectedIngredient, setSelectedIngredient] = useState<Ingredient | null>(null);
   const [modalIngredient, setModalIngredient] = useState<Ingredient | null>(null);
-  const ingredients = useSelector((state: RootState) => state.ingredients.items);
+
+  useEffect(() => {
+    dispatch(setIngredints(data));
+  }, [data])
+
 
   const scrollToSection = (
     sectionRef: React.RefObject<HTMLDivElement>,
@@ -26,29 +35,19 @@ const BurgerIngredients: FC = () => {
     setActiveButton(section);
   };
 
-  const handleSelectBun = (bunId: string) => {
-    setSelectedIngredient(ingredients.find((i) => i._id === bunId) || null);
-  };
-
-  const handleSelectSauce = (sauceId: string) => {
-    setSelectedIngredient(ingredients.find((i) => i._id === sauceId) || null);
-  };
-
-  const handleSelectFilling = (fillingId: string) => {
-    setSelectedIngredient(ingredients.find((i) => i._id === fillingId) || null);
-  };
-
   const openModal = (ingredient: Ingredient) => {
+    dispatch(setViewedIngredient(ingredient));
     setModalIngredient(ingredient);
   };
 
   const closeModal = () => {
+    dispatch(setViewedIngredient(null));
     setModalIngredient(null);
   };
 
-  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
-  const sauces = ingredients.filter((ingredient) => ingredient.type === 'sauce');
-  const fillings = ingredients.filter((ingredient) => ingredient.type === 'main');
+  const buns = data?.filter((ingredient) => ingredient.type === 'bun');
+  const sauces = data?.filter((ingredient) => ingredient.type === 'sauce');
+  const fillings = data?.filter((ingredient) => ingredient.type === 'main');
 
   return (
     <section className={`${styles.page} mr-10`}>
@@ -80,8 +79,6 @@ const BurgerIngredients: FC = () => {
           sectionRef={bunsRef}
           title='Булки'
           ingredients={buns}
-          selectedIngredient={selectedIngredient?._id || null}
-          setSelectedIngredient={handleSelectBun}
           openModal={openModal}
         />
 
@@ -89,8 +86,6 @@ const BurgerIngredients: FC = () => {
           sectionRef={saucesRef}
           title='Соусы'
           ingredients={sauces}
-          selectedIngredient={selectedIngredient?._id || null}
-          setSelectedIngredient={handleSelectSauce}
           openModal={openModal}
         />
 
@@ -98,8 +93,6 @@ const BurgerIngredients: FC = () => {
           sectionRef={fillingsRef}
           title='Начинки'
           ingredients={fillings}
-          selectedIngredient={selectedIngredient?._id || null}
-          setSelectedIngredient={handleSelectFilling}
           openModal={openModal}
         />
       </div>
