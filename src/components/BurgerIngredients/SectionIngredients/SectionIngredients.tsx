@@ -4,7 +4,7 @@ import selectedImage from '../../../images/seleted.svg';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../../types/Ingredient';
 import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient } from '../../../services/slices/constructorSlice';
+import { addIngredient, setBun } from '../../../services/slices/constructorSlice';
 import { RootState } from '../../../services/store';
 import { setViewedIngredient } from '../../../services/slices/setViewedIngredientSlice';
 
@@ -22,12 +22,24 @@ const SectionIngredients: FC<Props> = ({
   openModal,
 }) => {
   const dispatch = useDispatch();
-  const selectedIngredient = useSelector((state: RootState) => state.viewedIngredient.item?._id)
+  const selectedIngredient = useSelector((state: RootState) => state.viewedIngredient.item?._id);
+  const constructorBun = useSelector((state: RootState) => state.constructorIngredients.bun);
+  const constructorOtherIngredients = useSelector((state: RootState) => state.constructorIngredients.otherIngredients);
 
   const handleIngredientClick = (ingredient: Ingredient) => {
     dispatch(setViewedIngredient(ingredient));
-    dispatch(addIngredient(ingredient));
-    openModal(ingredient);
+    if (ingredient.type === 'bun') {
+      dispatch(setBun(ingredient));
+    } else {
+      dispatch(addIngredient(ingredient));
+    }
+    // openModal(ingredient);
+  };
+
+  const isIngredientInConstructor = (ingredient: Ingredient) => {
+    return ingredient.type === 'bun'
+      ? constructorBun?._id === ingredient._id
+      : constructorOtherIngredients.some(item => item._id === ingredient._id);
   };
 
   return (
@@ -39,7 +51,7 @@ const SectionIngredients: FC<Props> = ({
             key={ingredient._id}
             className={`${styles.ingredient} mr-4 ml-4`}
             onClick={() => handleIngredientClick(ingredient)}>
-            {(selectedIngredient === ingredient._id) && (
+            {isIngredientInConstructor(ingredient) && (
               <img
                 src={selectedImage}
                 className={styles.selectedIngredient}

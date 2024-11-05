@@ -3,25 +3,20 @@ import styles from './BurgerConstructor.module.scss';
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal';
 import OrderDetails from './OrderDetails/OrderDetails';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../services/store';
 import { IOrderResponse, useCompliteOrderMutation } from '../../services/baseApi';
+import { clearConstructor, removeIngredient } from '../../services/slices/constructorSlice';
 
 const BurgerConstructor: FC = () => {
-  const [compliteOrder, { isLoading, error }] = useCompliteOrderMutation();
-  const ingredients = useSelector((state: RootState) => state.constructorIngredients.products);
-  useEffect(() => {
-    console.log(ingredients)
-  }, [ingredients])
-
+  const [compliteOrder] = useCompliteOrderMutation();
+  const { bun, otherIngredients } = useSelector((state: RootState) => state.constructorIngredients);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderData, setOrderData] = useState<IOrderResponse>();
+  const dispatch = useDispatch();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  const bun = ingredients.find((ingredient) => ingredient.type === 'bun');
-  const otherIngredients = ingredients.filter((ingredient) => ingredient.type !== 'bun');
 
   const totalPrice = useMemo(() => {
     const bunPrice = bun ? bun.price * 2 : 0;
@@ -30,15 +25,21 @@ const BurgerConstructor: FC = () => {
   }, [bun, otherIngredients]);
 
   const handleOrder = async () => {
-    const ingredientIds = ingredients.map((ingredient) => ingredient._id);
+    const ingredientIds = [bun?._id, ...otherIngredients.map((ingredient) => ingredient._id)]
+      .filter((id): id is string => id !== undefined);
     try {
-      const response = await compliteOrder({ingredients: ingredientIds});
+      const response = await compliteOrder({ ingredients: ingredientIds });
       setOrderData(response.data);
-      openModal()
+      openModal();
     } catch (err) {
-      console.log('Не удалось создать заказ', err)
+      console.log('Не удалось создать заказ', err);
     }
-  }
+    dispatch(clearConstructor());
+  };
+
+  const handleDelete = (index: number) => {
+    dispatch(removeIngredient(index));
+  };
 
   return (
     <div className={`${styles.constructorSection} pt-20`}>
@@ -62,6 +63,7 @@ const BurgerConstructor: FC = () => {
                 text={ingredient.name}
                 thumbnail={ingredient.image}
                 price={ingredient.price}
+                handleClose={() => handleDelete(index)}
               />
             </div>
           ))}
