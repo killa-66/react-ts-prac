@@ -6,7 +6,9 @@ import OrderDetails from './OrderDetails/OrderDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../services/store';
 import { IOrderResponse, useCompliteOrderMutation } from '../../services/baseApi';
-import { clearConstructor, removeIngredient } from '../../services/slices/constructorSlice';
+import { addIngredient, clearConstructor, removeIngredient, setBun } from '../../services/slices/constructorSlice';
+import { useDrop } from 'react-dnd';
+import { Ingredient } from '../../types/Ingredient';
 
 const BurgerConstructor: FC = () => {
   const [compliteOrder] = useCompliteOrderMutation();
@@ -14,6 +16,17 @@ const BurgerConstructor: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderData, setOrderData] = useState<IOrderResponse>();
   const dispatch = useDispatch();
+  
+  const [, dropRef] = useDrop({
+    accept: 'ingredient',
+    drop: (ingredient: Ingredient) => {
+      if (ingredient.type === 'bun') {
+        dispatch(setBun(ingredient));
+      } else {
+        dispatch(addIngredient(ingredient));
+      }
+    },
+  });
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -42,8 +55,13 @@ const BurgerConstructor: FC = () => {
   };
 
   return (
-    <div className={`${styles.constructorSection} pt-20`}>
+    <div className={`${styles.constructorSection} pt-20`} ref={dropRef}>
       <>
+        {!bun && otherIngredients.length === 0 && (
+          <div className={`${styles.dragContainer}`}>
+            <span className='text text_type_main-medium'>Начните собирать бургер!</span>
+          </div>
+        )}
         {bun && (
           <ConstructorElement
             type='top'
@@ -80,7 +98,7 @@ const BurgerConstructor: FC = () => {
           />
         )}
 
-        <div className={`${styles.confirmSection} mr-8`}>
+        <div className={`${styles.confirmSection} mr-8 mt-10`}>
           <p className={`${styles.totalPrice} mr-4 text text_type_digits-medium`}>
             {totalPrice}
             <CurrencyIcon type={'primary'} />

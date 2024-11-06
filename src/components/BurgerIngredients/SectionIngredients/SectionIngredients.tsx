@@ -1,12 +1,7 @@
 import { FC } from 'react';
 import styles from './SectionIngredients.module.scss';
-import selectedImage from '../../../images/seleted.svg';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient } from '../../../types/Ingredient';
-import { useDispatch, useSelector } from 'react-redux';
-import { addIngredient, setBun } from '../../../services/slices/constructorSlice';
-import { RootState } from '../../../services/store';
-import { setViewedIngredient } from '../../../services/slices/setViewedIngredientSlice';
+import DraggableIngredient from '../DraggableIngredient/DraggableIngredient';
 
 interface Props {
   sectionRef: React.RefObject<HTMLDivElement>;
@@ -19,54 +14,15 @@ const SectionIngredients: FC<Props> = ({
   sectionRef,
   title,
   ingredients,
-  openModal,
+  openModal
 }) => {
-  const dispatch = useDispatch();
-  const selectedIngredient = useSelector((state: RootState) => state.viewedIngredient.item?._id);
-  const constructorBun = useSelector((state: RootState) => state.constructorIngredients.bun);
-  const constructorOtherIngredients = useSelector((state: RootState) => state.constructorIngredients.otherIngredients);
-
-  const handleIngredientClick = (ingredient: Ingredient) => {
-    dispatch(setViewedIngredient(ingredient));
-    if (ingredient.type === 'bun') {
-      dispatch(setBun(ingredient));
-    } else {
-      dispatch(addIngredient(ingredient));
-    }
-    // openModal(ingredient);
-  };
-
-  const isIngredientInConstructor = (ingredient: Ingredient) => {
-    return ingredient.type === 'bun'
-      ? constructorBun?._id === ingredient._id
-      : constructorOtherIngredients.some(item => item._id === ingredient._id);
-  };
 
   return (
     <div ref={sectionRef} className='pb-10'>
       <h3 className='text text_type_main-medium pb-6'>{title}</h3>
       <div className={styles.ingredientsGrid}>
         {ingredients?.map((ingredient) => (
-          <div
-            key={ingredient._id}
-            className={`${styles.ingredient} mr-4 ml-4`}
-            onClick={() => handleIngredientClick(ingredient)}>
-            {isIngredientInConstructor(ingredient) && (
-              <img
-                src={selectedImage}
-                className={styles.selectedIngredient}
-                alt='Выбранный элемент'
-              />
-            )}
-            <img src={ingredient.image} alt={ingredient.name} />
-            <p className={`${styles.price} text text_type_digits-default pb-1 pt-1`}>
-              {ingredient.price}
-              <CurrencyIcon type={'primary'} />
-            </p>
-            <p className='text text_type_main-default pb-1 pt-1'>
-              {ingredient.name}
-            </p>
-          </div>
+          <DraggableIngredient key={ingredient._id} ingredient={ingredient} openModal={openModal} />
         ))}
       </div>
     </div>
