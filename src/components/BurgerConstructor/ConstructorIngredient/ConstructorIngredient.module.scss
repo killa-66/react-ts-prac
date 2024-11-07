@@ -1,0 +1,12 @@
+.middleItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 556px;
+  cursor: move;
+}
+
+.dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+}

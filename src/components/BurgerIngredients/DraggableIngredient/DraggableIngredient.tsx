@@ -1,13 +1,10 @@
-import { FC } from "react";
-import { Ingredient } from "../../../types/Ingredient";
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from './DraggableIngredient.module.scss';
-import { useDispatch, useSelector } from "react-redux";
-import { setViewedIngredient } from "../../../services/slices/setViewedIngredientSlice";
-import { addIngredient, setBun } from "../../../services/slices/constructorSlice";
-import { RootState } from '../../../services/store';
-import selectedImage from '../../../images/seleted.svg';
+import { FC } from "react";
 import { useDrag } from "react-dnd";
+import { useSelector } from "react-redux";
+import { RootState } from '../../../services/store';
+import { Ingredient } from "../../../types/Ingredient";
+import styles from './DraggableIngredient.module.scss';
 
 
 
@@ -16,7 +13,7 @@ interface Props {
   openModal: (ingredient: Ingredient) => void;
 }
 
-const DraggableIngredient: FC<Props> = ({ ingredient, openModal }) => {
+const DraggableIngredient: FC<Props> = ({ ingredient, openModal}) => {
   const constructorBun = useSelector((state: RootState) => state.constructorIngredients.bun);
   const constructorOtherIngredients = useSelector((state: RootState) => state.constructorIngredients.otherIngredients);
 
@@ -34,7 +31,7 @@ const DraggableIngredient: FC<Props> = ({ ingredient, openModal }) => {
     }
   }
 
-  const [{ isDragging }, dragRef] = useDrag({
+  const [ isDragging , dragRef] = useDrag({
     type: 'ingredient',
     item: ingredient,
     collect: (monitor) => ({

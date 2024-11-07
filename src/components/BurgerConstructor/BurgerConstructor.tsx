@@ -1,14 +1,15 @@
-import { FC, useState, useMemo, useEffect } from 'react';
-import styles from './BurgerConstructor.module.scss';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../Modal/Modal';
-import OrderDetails from './OrderDetails/OrderDetails';
+import { Button, ConstructorElement, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { FC, useMemo, useState } from 'react';
+import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../services/store';
 import { IOrderResponse, useCompliteOrderMutation } from '../../services/baseApi';
 import { addIngredient, clearConstructor, removeIngredient, setBun } from '../../services/slices/constructorSlice';
-import { useDrop } from 'react-dnd';
+import { RootState } from '../../services/store';
 import { Ingredient } from '../../types/Ingredient';
+import Modal from '../Modal/Modal';
+import styles from './BurgerConstructor.module.scss';
+import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient';
+import OrderDetails from './OrderDetails/OrderDetails';
 
 const BurgerConstructor: FC = () => {
   const [compliteOrder] = useCompliteOrderMutation();
@@ -16,7 +17,7 @@ const BurgerConstructor: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderData, setOrderData] = useState<IOrderResponse>();
   const dispatch = useDispatch();
-  
+
   const [, dropRef] = useDrop({
     accept: 'ingredient',
     drop: (ingredient: Ingredient) => {
@@ -75,15 +76,12 @@ const BurgerConstructor: FC = () => {
 
         <div className={`${styles.ingredientSection}`}>
           {otherIngredients.map((ingredient, index) => (
-            <div key={index} className={styles.middleItem}>
-              <DragIcon type={'primary'} />
-              <ConstructorElement
-                text={ingredient.name}
-                thumbnail={ingredient.image}
-                price={ingredient.price}
-                handleClose={() => handleDelete(index)}
-              />
-            </div>
+            <ConstructorIngredient
+              key={index}
+              ingredient={ingredient}
+              handleDelete={handleDelete}
+              index={index}
+            />
           ))}
         </div>
 
