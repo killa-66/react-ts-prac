@@ -1,5 +1,10 @@
+import { Ingredient } from './../../types/Ingredient';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Ingredient } from '../../types/Ingredient';
+import { v4 as uuidv4 } from 'uuid';
+
+interface IngredientWithId extends Ingredient {
+  uniqueId: string;
+}
 
 interface ConstructorState {
   bun: Ingredient | null;
@@ -17,8 +22,13 @@ const constructorSlice = createSlice({
     setBun(state, action: PayloadAction<Ingredient>) {
       state.bun = action.payload;
     },
-    addIngredient(state, action: PayloadAction<Ingredient>) {
-      state.otherIngredients.push(action.payload);
+    addIngredient: {
+      reducer: (state, action: PayloadAction<IngredientWithId>) => {
+        state.otherIngredients.push(action.payload);
+      },
+      prepare: (ingredient: Ingredient) => {
+        return { payload: { ...ingredient, uniqueId: uuidv4() } };
+      },
     },
     removeIngredient: (state, action: PayloadAction<number>) => {
       state.otherIngredients.splice(action.payload, 1);
