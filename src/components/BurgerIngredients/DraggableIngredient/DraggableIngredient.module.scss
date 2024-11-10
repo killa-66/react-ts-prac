@@ -1,0 +1,26 @@
+.selectedIngredient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 34px;
+  width: 34px;
+}
+
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ingredient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.dragging {
+  opacity: 0.5;
+}
