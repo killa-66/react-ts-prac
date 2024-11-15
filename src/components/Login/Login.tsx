@@ -1,16 +1,15 @@
 import { FC, SetStateAction, useState } from "react";
-import styless from './Login.module.scss';
+import styles from './Login.module.scss';
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const Login:FC = () => {
-
   const [value, setValue] = useState('bob@example.com')
   const onChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setValue(e.target.value)
   }
 
   return (
-    <div className={styless.login}>
+    <div className={`${styles.login} mt-30`}>
       <h2 className="mb-6 text text_type_main-default">Вход</h2>
       <EmailInput
         onChange={onChange}
@@ -35,12 +34,12 @@ const Login:FC = () => {
 
       <div>
         <span className="text text_type_main-small">Вы - новый пользователь?&nbsp;</span>
-        <a href="/" className={`text text_type_main-small ${styless.text_link}`}>Зарегестрироваться</a>
+        <a href="/" className={`text text_type_main-small ${styles.text_link}`}>Зарегестрироваться</a>
       </div>
 
       <div>
         <span className="text text_type_main-small">Забыли пароль?&nbsp;</span>
-        <a href="/" className={`text text_type_main-small ${styless.text_link}`}>Восстановить пароль</a>
+        <a href="/" className={`text text_type_main-small ${styles.text_link}`}>Восстановить пароль</a>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import styles from './App.module.scss';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Login from '../Login/Login';
+import Register from '../Register/Register';
 
 const App: FC = () => {
 
@@ -24,6 +25,7 @@ const App: FC = () => {
               }
             />
             <Route path='/login' element={<Login />}/>
+            <Route path='/register' element={<Register />}/>
           </Routes>
         </main>
       </Router>
