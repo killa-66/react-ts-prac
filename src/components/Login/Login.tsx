@@ -10,7 +10,7 @@ const Login:FC = () => {
 
   return (
     <div className={`${styles.login} mt-30`}>
-      <h2 className="mb-6 text text_type_main-default">Вход</h2>
+      <h2 className="mb-6 text text_type_main-medium">Вход</h2>
       <EmailInput
         onChange={onChange}
         value={value}
@@ -34,12 +34,12 @@ const Login:FC = () => {
 
       <div>
         <span className="text text_type_main-small">Вы - новый пользователь?&nbsp;</span>
-        <a href="/" className={`text text_type_main-small ${styles.text_link}`}>Зарегестрироваться</a>
+        <a href="/register" className={`text text_type_main-small ${styles.button_text}`}>Зарегестрироваться</a>
       </div>
 
-      <div>
+      <div className="g">
         <span className="text text_type_main-small">Забыли пароль?&nbsp;</span>
-        <a href="/" className={`text text_type_main-small ${styles.text_link}`}>Восстановить пароль</a>
+        <a href="/forgot-password" className={`text text_type_main-small ${styles.button_text}`}>Восстановить пароль</a>
       </div>
     </div>
   )

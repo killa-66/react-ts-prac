@@ -1,17 +1,25 @@
 import { Button, EmailInput, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { FC, SetStateAction, useState } from "react";
-import styles from './Register.module.scss'
+import styles from './Profile.module.scss'
 
 
-const Register: FC = () => {
+const Profile: FC = () => {
   const [value, setValue] = useState('bob@example.com')
   const onChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setValue(e.target.value)
   }
 
   return(
-    <div className={`${styles.register} mt-30`}>
-      <h2 className="mb-6 text text_type_main-medium">Регистрация</h2>
+    <div className={`${styles.profile} mt-30`}>
+      <div className={`${styles.profile_section} mr-15`}>
+        <div className={`${styles.profile_element} text text text_type_main-medium`}>Профиль</div>
+        <div className={`${styles.profile_element} text text text_type_main-medium`}>История заказов</div>
+        <div className={`${styles.profile_element} mb-20 text text text_type_main-medium`}>Выход</div>
+        <div className={`${styles.profile_element} text text_type_main-small text_color_inactive`}>
+          В этом разделе вы можете изменить свои персональные данные
+        </div>
+      </div>
+
       <div className={styles.input_section}>
         <Input
           type={'text'}
@@ -40,21 +48,10 @@ const Register: FC = () => {
           name={'password'}
           extraClass="mb-6"
         />
-
-        <Button
-          htmlType={"button"}
-          extraClass="mb-20"
-          size="medium"
-        >Зарегестрироваться</Button>
-
-        <div>
-          <span className="text text_type_main-small">Уже зарегестрированы?&nbsp;</span>
-          <a href="/login" className={`text text_type_main-small ${styles.button_text}`}>Войти</a>
-        </div>
       </div>
 
     </div>
   )
 }
 
-export default Register;
+export default Profile;

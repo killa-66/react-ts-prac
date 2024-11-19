@@ -1,13 +1,12 @@
-.register {
+.profile {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .input_section {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .profile_section {
@@ -21,9 +20,4 @@
   justify-content: flex-start;
   width: 320px;
   height: 64px;
-}
-
-.button_text {
-  color: #4C4CFF;
-  text-decoration: none;
 }

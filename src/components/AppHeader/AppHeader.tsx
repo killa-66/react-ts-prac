@@ -7,8 +7,11 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './AppHeader.module.scss';
+import { useNavigate } from 'react-router-dom';
 
 const AppHeader: FC = () => {
+  const navigate = useNavigate();
+
   return (
     <header className={styles.header_body}>
       <nav className={styles.navigation}>
@@ -18,7 +21,8 @@ const AppHeader: FC = () => {
             <Button
               htmlType='button'
               type={'secondary'}
-              extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}>
+              extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}
+              onClick={() => navigate('/')}>
               Конструктор
             </Button>
           </li>
@@ -43,7 +47,8 @@ const AppHeader: FC = () => {
         <Button
           htmlType='button'
           type={'secondary'}
-          extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}>
+          extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}
+          onClick={() => navigate('/profile')}>
           Личный кабинет
         </Button>
       </div>
