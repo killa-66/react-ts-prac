@@ -5,12 +5,29 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { FC, SetStateAction, useState } from 'react';
 import styles from './Profile.module.scss';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useLogoutMutation } from '../../services/userApi';
 
 const Profile: FC = () => {
   const [value, setValue] = useState('bob@example.com');
   const onChange = (e: { target: { value: SetStateAction<string> } }) => {
     setValue(e.target.value);
+  };
+  const [logout] = useLogoutMutation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) throw new Error('Refresh token не найден');
+
+      await logout({ token: refreshToken }).unwrap();
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      navigate('/register');
+    } catch (error) {
+      console.error('Ошибка выхода из системы:', error);
+    }
   };
 
   return (
@@ -40,7 +57,8 @@ const Profile: FC = () => {
               ? `${styles.profile_element} ${styles.profile_element_active} text text text_type_main-medium`
               : `${styles.profile_element} text text text_type_main-medium text_color_inactive`
           }
-          to={'/'}>
+          to={'/'}
+          onClick={handleLogout}>
           Выход
         </NavLink>
         <div
