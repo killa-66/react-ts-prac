@@ -1,18 +1,44 @@
 import {
+  Button,
   EmailInput,
   Input,
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FC, SetStateAction, useState } from 'react';
+import { FC, SetStateAction, useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../../services/userApi';
+import { useLogoutMutation, useGetUserQuery, useSetUserMutation } from '../../services/userApi';
 
 const Profile: FC = () => {
-  const [value, setValue] = useState('bob@example.com');
-  const onChange = (e: { target: { value: SetStateAction<string> } }) => {
-    setValue(e.target.value);
+  const { data: userData, refetch } = useGetUserQuery();
+  const [setUser] = useSetUserMutation();
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+
+  useEffect(() => {
+    if(userData?.user) {
+      setForm({ name: userData.user.name, email: userData.user.email, password: '' })
+    }
+  }, [userData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
+
+  const handleSave = async () => {
+    try {
+      await setUser({ name: form.name, email: form.email }).unwrap();
+      refetch();
+    } catch (error) {
+      console.error('Ошибка обновления данных пользователя:', error);
+    }
+  };
+
+  const handleCancel = () => {
+    if (userData?.user) {
+      setForm({ name: userData.user.name, email: userData.user.email, password: '' });
+    }
+  };
+
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
 
@@ -71,9 +97,9 @@ const Profile: FC = () => {
         <Input
           type={'text'}
           placeholder={'Имя'}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={handleChange}
           icon={'EditIcon'}
-          value={value}
+          value={form.name}
           name={'name'}
           error={false}
           errorText={'Ошибка'}
@@ -82,19 +108,24 @@ const Profile: FC = () => {
         />
 
         <EmailInput
-          onChange={onChange}
-          value={value}
+          onChange={handleChange}
+          value={form.email}
           name={'email'}
           isIcon={false}
           extraClass='mb-6'
         />
 
         <PasswordInput
-          onChange={onChange}
-          value={value}
+          onChange={handleChange}
+          value={form.password}
           name={'password'}
           extraClass='mb-6'
         />
+
+        <div className={styles.button_section}>
+          <Button onClick={handleSave} htmlType={'submit'}>Сохранить</Button>
+          <Button onClick={handleCancel} htmlType={'submit'}>Отмена</Button>
+        </div>
       </div>
     </div>
   );

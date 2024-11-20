@@ -47,6 +47,11 @@ export interface IRegisterRequest {
   name: string;
 }
 
+export interface IUserResponse {
+  success: boolean;
+  user: IUser;
+}
+
 const userApi = createApi({
   reducerPath: 'user/api',
   baseQuery: fetchBaseQuery({
@@ -109,6 +114,31 @@ const userApi = createApi({
         method: 'POST',
       }),
     }),
+    getUser: build.query<IUserResponse, void>({
+      query: () => {
+        const token = localStorage.getItem('accessToken');
+        return {
+          url: 'auth/user',
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer${token}`,
+          },
+        };
+      },
+    }),
+    setUser: build.mutation<IUserResponse, IUser>({
+      query: (body) => {
+        const token = localStorage.getItem('accessToken');
+        return {
+          url: 'auth/user',
+          method: 'PATCH',
+          body,
+          headers: {
+            Authorization: `Bearer${token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -119,5 +149,7 @@ export const {
   useLogoutMutation,
   useRefreshTokenMutation,
   useLoginMutation,
+  useGetUserQuery,
+  useSetUserMutation,
 } = userApi;
 export default userApi;
