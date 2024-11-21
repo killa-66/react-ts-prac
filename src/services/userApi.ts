@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { loginSuccess } from './slices/userSlice';
+import { loginSuccess, logout } from './slices/userSlice';
 
 export interface IUser {
   email: string;
@@ -78,6 +78,24 @@ const userApi = createApi({
         method: 'POST',
         body,
       }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const { data } = await queryFulfilled;
+          const { accessToken, refreshToken, user } = data;
+
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
+
+          dispatch(
+            loginSuccess({
+              token: accessToken,
+              user,
+            })
+          );
+        } catch (error) {
+          console.error('Ошибка авторизации:', error);
+        }
+      },
     }),
     register: build.mutation<IAuthResponse, IRegisterRequest>({
       query: (body) => ({
@@ -107,6 +125,17 @@ const userApi = createApi({
         method: 'POST',
         body,
       }),
+      async onQueryStarted(arg, { dispatch }) {
+        try {
+
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('accessToken');
+
+          dispatch(logout());
+        } catch (error) {
+          console.error('Ошибка при выходе:', error);
+        }
+      },
     }),
     refreshToken: build.mutation<IAuthResponse, void>({
       query: () => ({

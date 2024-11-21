@@ -4,7 +4,7 @@ import {
   Input,
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { FC, SetStateAction, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './Profile.module.scss';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useLogoutMutation, useGetUserQuery, useSetUserMutation } from '../../services/userApi';

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
 
 interface UserState {
   isAuthenticated: boolean;
@@ -23,6 +24,7 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
       state.accessToken = action.payload.token;
       state.user = action.payload.user;
+      console.log('Updated State:', action.payload);
     },
     logout(state) {
       state.isAuthenticated = false;
