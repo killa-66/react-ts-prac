@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Ingredient } from '../types/Ingredient';
+import { RootState } from './store';
 
 export interface ServerResponse<T> {
   data: T;
@@ -33,6 +34,13 @@ export const baseApi = createApi({
   reducerPath: 'ingredients/api',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://norma.nomoreparties.space/api/',
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).user.accessToken;
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   refetchOnFocus: true,
   endpoints: (build) => ({
