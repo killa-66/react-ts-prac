@@ -6,7 +6,7 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useLoginMutation } from '../../services/userApi';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Login: FC = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -59,19 +59,19 @@ const Login: FC = () => {
         <span className='text text_type_main-small'>
           Вы - новый пользователь?&nbsp;
         </span>
-        <a
-          href='/register'
+        <NavLink
+          to={'/register'}
           className={`text text_type_main-small ${styles.button_text}`}>
           Зарегистрироваться
-        </a>
+        </NavLink>
       </div>
       <div>
         <span className='text text_type_main-small'>Забыли пароль?&nbsp;</span>
-        <a
-          href='/forgot-password'
+        <NavLink
+          to={'/forgot-password'}
           className={`text text_type_main-small ${styles.button_text}`}>
           Восстановить пароль
-        </a>
+        </NavLink>
       </div>
     </div>
   );

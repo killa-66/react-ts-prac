@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { loginSuccess, logout } from './slices/userSlice';
+import { BASE_URL } from './baseApi';
 
 export interface IUser {
   email: string;
@@ -52,10 +53,11 @@ export interface IUserResponse {
   user: IUser;
 }
 
+
 const userApi = createApi({
   reducerPath: 'user/api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://norma.nomoreparties.space/api/',
+    baseUrl: BASE_URL,
   }),
   endpoints: (build) => ({
     resetPassword: build.mutation<IPasswordResetResponse, IPasswordResetRequest>({
@@ -79,22 +81,18 @@ const userApi = createApi({
         body,
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const { data } = await queryFulfilled;
-          const { accessToken, refreshToken, user } = data;
+        const { data } = await queryFulfilled;
+        const { accessToken, refreshToken, user } = data;
 
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
 
-          dispatch(
-            loginSuccess({
-              token: accessToken,
-              user,
-            })
-          );
-        } catch (error) {
-          console.error('Ошибка авторизации:', error);
-        }
+        dispatch(
+          loginSuccess({
+            token: accessToken,
+            user,
+          })
+        );
       },
     }),
     register: build.mutation<IAuthResponse, IRegisterRequest>({
@@ -104,19 +102,15 @@ const userApi = createApi({
         body,
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const { data } = await queryFulfilled;
-          const { accessToken, refreshToken, user } = data;
-          localStorage.setItem('refreshToken', refreshToken);
-          dispatch(
-            loginSuccess({
-              token: accessToken,
-              user,
-            })
-          );
-        } catch (error) {
-          console.error('Ошибка регистрации:', error);
-        }
+        const { data } = await queryFulfilled;
+        const { accessToken, refreshToken, user } = data;
+        localStorage.setItem('refreshToken', refreshToken);
+        dispatch(
+          loginSuccess({
+            token: accessToken,
+            user,
+          })
+        );
       },
     }),
     logout: build.mutation<ILogoutResponse, ILogoutRequest>({
@@ -126,15 +120,10 @@ const userApi = createApi({
         body,
       }),
       async onQueryStarted(arg, { dispatch }) {
-        try {
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('accessToken');
 
-          localStorage.removeItem('refreshToken');
-          localStorage.removeItem('accessToken');
-
-          dispatch(logout());
-        } catch (error) {
-          console.error('Ошибка при выходе:', error);
-        }
+        dispatch(logout());
       },
     }),
     refreshToken: build.mutation<IAuthResponse, void>({

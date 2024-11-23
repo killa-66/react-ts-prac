@@ -29,6 +29,14 @@ const BurgerIngredients: FC = () => {
     if (data) dispatch(setIngredints(data));
   }, [data, dispatch]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    container?.addEventListener('scroll', handleScroll);
+    return () => {
+      container?.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const scrollToSection = (sectionRef: React.RefObject<HTMLDivElement>, section: string) => {
     sectionRef.current?.scrollIntoView({ behavior: "smooth" });
     setActiveButton(section);
@@ -42,6 +50,30 @@ const BurgerIngredients: FC = () => {
   const buns = data?.filter((ingredient) => ingredient.type === "bun");
   const sauces = data?.filter((ingredient) => ingredient.type === "sauce");
   const fillings = data?.filter((ingredient) => ingredient.type === "main");
+
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+
+    const bunsPosition = bunsRef.current?.getBoundingClientRect().top || 0;
+    const saucesPosition = saucesRef.current?.getBoundingClientRect().top || 0;
+    const fillingsPosition = fillingsRef.current?.getBoundingClientRect().top || 0;
+
+    const containerTop = containerRef.current.getBoundingClientRect().top;
+
+    const bunsDistance = Math.abs(bunsPosition - containerTop);
+    const saucesDistance = Math.abs(saucesPosition - containerTop);
+    const fillingsDistance = Math.abs(fillingsPosition - containerTop);
+
+    const minDistance = Math.min(bunsDistance, saucesDistance, fillingsDistance);
+
+    if (minDistance === bunsDistance) {
+      setActiveButton('buns');
+    } else if (minDistance === saucesDistance) {
+      setActiveButton('sauces');
+    } else {
+      setActiveButton('fillings');
+    }
+  };
 
   return (
     <section className={`${styles.page} mr-10`}>

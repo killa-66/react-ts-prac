@@ -30,14 +30,16 @@ export interface IOrderResponse {
   success: boolean;
 }
 
+export const BASE_URL = 'https://norma.nomoreparties.space/api/'
+
 export const baseApi = createApi({
   reducerPath: 'ingredients/api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://norma.nomoreparties.space/api/',
+    baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).user.accessToken;
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set('Authorization', `Bearer${token}`);
       }
       return headers;
     },

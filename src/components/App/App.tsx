@@ -1,22 +1,37 @@
-import { FC } from 'react';
-import AppHeader from '../AppHeader/AppHeader';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import styles from './App.module.scss';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import { FC, useEffect } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import Login from '../Login/Login';
-import Register from '../Register/Register';
-import Profile from '../Profile/Profile';
-import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import ResetPassword from '../ResetPassword/ResetPassword';
-import { OnlyAuth, OnlyUnAuth } from '../ProtectedRouteElement/ProtectedRouteElement';
-import Modal from '../Modal/Modal';
+import Profile from '../../pages/Profile/Profile';
+import ResetPassword from '../../pages/ResetPassword/ResetPassword';
+import AppHeader from '../AppHeader/AppHeader';
+import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import IngredientDetails from '../BurgerIngredients/IngredientDetails/IngredientDetails';
+import Modal from '../Modal/Modal';
+import { OnlyAuth, OnlyUnAuth } from '../ProtectedRouteElement/ProtectedRouteElement';
+import styles from './App.module.scss';
+import Login from '../../pages/Login/Login';
+import Register from '../../pages/Register/Register';
+import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword';
+import { useAuth } from '../../hooks/useAuth';
 
 const App: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const backgroundState = location.state && location.state.background;
+  const { isAuthenticated, isLoading } = useAuth();
+
+  useEffect(() => {
+    localStorage.setItem('lastVisitedPath', location.pathname);
+  }, [location.pathname]);
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (!isAuthenticated && location.pathname !== '/login') {
+    const lastVisitedPath = localStorage.getItem('lastVisitedPath') || '/';
+    navigate(lastVisitedPath === '/profile' ? '/login' : lastVisitedPath);
+  }
 
   return (
     <div className={styles.page}>

@@ -1,12 +1,21 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./ResetPassword.module.scss";
 import { Button, Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSaveNewPasswordMutation } from "../../services/userApi";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 const ResetPassword: FC = () => {
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
   const [saveNewPassword, { isLoading, isError, isSuccess }] = useSaveNewPasswordMutation();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.state || !location.state.fromForgotPassword) {
+      navigate('/forgot-password');
+    }
+  }, [location, navigate]);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -29,7 +38,7 @@ const ResetPassword: FC = () => {
     <div>
       <div className={`${styles.reset_password} mt-30`}>
         <h2 className="mb-6 text text_type_main-medium">Восстановление пароля</h2>
-        <div className={styles.input_section}>
+        <form className={styles.input_section} onSubmit={handleSave}>
           <PasswordInput
             onChange={handlePasswordChange}
             value={password}
@@ -47,10 +56,9 @@ const ResetPassword: FC = () => {
           />
 
           <Button
-            htmlType="button"
+            htmlType="submit"
             extraClass="mb-20"
             size="medium"
-            onClick={handleSave}
             disabled={isLoading}
           >
             {isLoading ? "Сохранение..." : "Сохранить"}
@@ -64,9 +72,13 @@ const ResetPassword: FC = () => {
 
           <div>
             <span className="text text_type_main-small">Вспомнили пароль?&nbsp;</span>
-            <a href="/login" className={`text text_type_main-small ${styles.button_text}`}>Войти</a>
+            <NavLink
+              to={'/login'}
+              className={`text text_type_main-small ${styles.button_text}`}>
+                Войти
+            </NavLink>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import {
 import { FC, useState } from 'react';
 import styles from './Register.module.scss';
 import { useRegisterMutation } from '../../services/userApi';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register: FC = () => {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -73,11 +73,11 @@ const Register: FC = () => {
         <span className='text text_type_main-small'>
           Уже зарегистрированы?&nbsp;
         </span>
-        <a
-          href='/login'
+        <NavLink
+          to={'/login'}
           className={`text text_type_main-small ${styles.button_text}`}>
           Войти
-        </a>
+        </NavLink>
       </div>
     </div>
   );
