@@ -22,15 +22,16 @@ const App: FC = () => {
 
   useEffect(() => {
     localStorage.setItem('lastVisitedPath', location.pathname);
-  }, [location.pathname]);
+
+    if (!isLoading && !isAuthenticated && location.pathname !== '/login') {
+      const lastVisitedPath = localStorage.getItem('lastVisitedPath') || '/';
+      const redirectPath = lastVisitedPath === '/profile' ? '/login' : lastVisitedPath;
+      navigate(redirectPath);
+    }
+  }, [isAuthenticated, isLoading, location.pathname, navigate]);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
-  }
-
-  if (!isAuthenticated && location.pathname !== '/login') {
-    const lastVisitedPath = localStorage.getItem('lastVisitedPath') || '/';
-    navigate(lastVisitedPath === '/profile' ? '/login' : lastVisitedPath);
   }
 
   return (
