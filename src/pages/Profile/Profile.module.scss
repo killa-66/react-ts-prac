@@ -1,0 +1,34 @@
+.profile {
+  display: flex;
+  align-items: flex-start;
+}
+
+.input_section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile_section {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile_element {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 320px;
+  height: 64px;
+  text-decoration: none;
+}
+
+.profile_element_active {
+  color: #F2F2F3;
+}
+
+.button_section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}

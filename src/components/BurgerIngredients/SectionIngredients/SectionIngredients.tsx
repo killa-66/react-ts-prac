@@ -22,7 +22,7 @@ const SectionIngredients: FC<Props> = ({
       <h3 className='text text_type_main-medium pb-6'>{title}</h3>
       <div className={styles.ingredientsGrid}>
         {ingredients?.map((ingredient) => (
-          <DraggableIngredient key={ingredient._id} ingredient={ingredient} openModal={openModal} />
+          <DraggableIngredient key={ingredient._id} ingredient={ingredient} />
         ))}
       </div>
     </div>

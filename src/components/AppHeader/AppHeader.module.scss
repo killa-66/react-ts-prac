@@ -1,7 +1,7 @@
 .header_body {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   background-color: #1C1C21;
   min-height: 88px;
   min-width: 100vw;
@@ -14,10 +14,6 @@
   justify-content: center;
 }
 
-.button_header {
-  color: #F2F2F3;
-}
-
 .menu_list {
   display: flex;
   align-items: center;
@@ -27,4 +23,12 @@
   display: flex;
   align-items: center;
   margin-right: 8px;
+}
+
+.header_link {
+  text-decoration: none;
+}
+
+.header_link_active {
+  color: #F2F2F3;
 }

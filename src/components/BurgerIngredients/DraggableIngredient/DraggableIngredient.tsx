@@ -1,37 +1,37 @@
+import { FC } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { FC } from "react";
 import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
 import { RootState } from '../../../services/store';
 import { Ingredient } from "../../../types/Ingredient";
 import styles from './DraggableIngredient.module.scss';
 
-
-
 interface Props {
   ingredient: Ingredient;
-  openModal: (ingredient: Ingredient) => void;
 }
 
-const DraggableIngredient: FC<Props> = ({ ingredient, openModal}) => {
+const DraggableIngredient: FC<Props> = ({ ingredient }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const constructorBun = useSelector((state: RootState) => state.constructorIngredients.bun);
   const constructorOtherIngredients = useSelector((state: RootState) => state.constructorIngredients.otherIngredients);
 
   const isIngredientInConstructor = (ingredient: Ingredient) => {
     return ingredient.type === 'bun'
       ? constructorBun?._id === ingredient._id
-      : constructorOtherIngredients.some(item => item._id === ingredient._id);
+      : constructorOtherIngredients.some(ingredient => ingredient._id === ingredient._id);
   };
 
   const count = (ingredient: Ingredient) => {
-    if(ingredient.type === 'bun') {
+    if (ingredient.type === 'bun') {
       return 1;
     } else {
       return constructorOtherIngredients.filter((element) => element._id === ingredient._id).length
     }
-  }
+  };
 
-  const [ isDragging , dragRef] = useDrag({
+  const [_, dragRef] = useDrag({
     type: 'ingredient',
     item: ingredient,
     collect: (monitor) => ({
@@ -39,11 +39,14 @@ const DraggableIngredient: FC<Props> = ({ ingredient, openModal}) => {
     }),
   });
 
+  const openModal = () => {
+    navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    });
+  };
+
   return (
-    <div
-      ref={dragRef}
-      className={`${styles.ingredient} mr-4 ml-4`}
-      onClick={() => openModal(ingredient)}>
+    <div ref={dragRef} className={`${styles.ingredient} mr-4 ml-4`} onClick={openModal}>
       {isIngredientInConstructor(ingredient) && (
         <Counter count={count(ingredient)} size="default" extraClass="m-1" />
       )}
