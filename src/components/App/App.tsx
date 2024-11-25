@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Profile from '../../pages/Profile/Profile';
 import ResetPassword from '../../pages/ResetPassword/ResetPassword';
@@ -12,27 +12,12 @@ import styles from './App.module.scss';
 import Login from '../../pages/Login/Login';
 import Register from '../../pages/Register/Register';
 import ForgotPassword from '../../pages/ForgotPassword/ForgotPassword';
-import { useAuth } from '../../hooks/useAuth';
+import IngredientDetailsPage from '../../pages/IngredientDetailsPage/IngredientDetailsPage';
 
 const App: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const backgroundState = location.state && location.state.background;
-  const { isAuthenticated, isLoading } = useAuth();
-
-  useEffect(() => {
-    localStorage.setItem('lastVisitedPath', location.pathname);
-
-    if (!isLoading && !isAuthenticated && location.pathname !== '/login') {
-      const lastVisitedPath = localStorage.getItem('lastVisitedPath') || '/';
-      const redirectPath = lastVisitedPath === '/profile' ? '/login' : lastVisitedPath;
-      navigate(redirectPath);
-    }
-  }, [isAuthenticated, isLoading, location.pathname, navigate]);
-
-  if (isLoading) {
-    return <div>Загрузка...</div>;
-  }
+  const backgroundState = location.state?.background;
 
   return (
     <div className={styles.page}>
@@ -52,11 +37,10 @@ const App: FC = () => {
           <Route path="/register" element={<OnlyUnAuth component={<Register />} />} />
           <Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPassword />} />} />
           <Route path="/reset-password" element={<OnlyUnAuth component={<ResetPassword />} />} />
-
           <Route path="/profile" element={<OnlyAuth component={<Profile />} />} />
           <Route
             path="/ingredients/:ingredientId"
-            element={<IngredientDetails ingredient={null} />}
+            element={<IngredientDetailsPage />}
           />
         </Routes>
 
@@ -65,7 +49,7 @@ const App: FC = () => {
             <Route
               path="/ingredients/:ingredientId"
               element={
-                <Modal title="Детали ингредиента" onClose={() => navigate("/")}>
+                <Modal title="Детали ингредиента" onClose={() => navigate(-1)}>
                   <IngredientDetails ingredient={null} />
                 </Modal>
               }

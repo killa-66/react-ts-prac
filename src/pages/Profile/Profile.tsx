@@ -93,7 +93,7 @@ const Profile: FC = () => {
         </div>
       </div>
 
-      <div className={styles.input_section}>
+      <form className={styles.input_section} onSubmit={handleSave}>
         <Input
           type={'text'}
           placeholder={'Имя'}
@@ -123,10 +123,10 @@ const Profile: FC = () => {
         />
 
         <div className={styles.button_section}>
-          <Button onClick={handleSave} htmlType={'submit'}>Сохранить</Button>
-          <Button onClick={handleCancel} htmlType={'submit'}>Отмена</Button>
+          <Button htmlType={'submit'}>Сохранить</Button>
+          <Button onClick={handleCancel} htmlType={'button'}>Отмена</Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

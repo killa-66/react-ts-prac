@@ -2,8 +2,6 @@ import { FC, useEffect, useRef, useState } from 'react';
 import styles from './BurgerIngredients.module.scss';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import SectionIngredients from './SectionIngredients/SectionIngredients';
-import Modal from '../Modal/Modal';
-import IngredientDetails from './IngredientDetails/IngredientDetails';
 import { Ingredient } from '../../types/Ingredient';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../services/store';
@@ -44,8 +42,11 @@ const BurgerIngredients: FC = () => {
 
   const openModal = (ingredient: Ingredient) => {
     dispatch(setViewedIngredient(ingredient));
-    navigate(`/ingredients/${ingredient._id}`, { state: { background: location } });
+    navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location },
+    });
   };
+
 
   const buns = data?.filter((ingredient) => ingredient.type === "bun");
   const sauces = data?.filter((ingredient) => ingredient.type === "sauce");

@@ -1,23 +1,28 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styles from './ForgotPassword.module.scss'
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useResetPasswordMutation } from '../../services/userApi';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const ForgotPassword:FC = () => {
   const [email, setEmail] = useState('');
   const [resetPassword, { isLoading, isError, isSuccess }] = useResetPasswordMutation();
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handleReset = async () => {
+  const handleReset = async (event: React.FormEvent) => {
+    event.preventDefault();
     try {
       await resetPassword({ email }).unwrap();
       console.log('Письмо с инструкцией отправлено на ваш email.');
+      console.log(location.state)
       navigate('/reset-password', { state: { fromForgotPassword: true } });
+      console.log(location.state)
     } catch {
       console.log('Не удалось отправить письмо. Проверьте email и повторите попытку.');
     }
@@ -27,7 +32,7 @@ const ForgotPassword:FC = () => {
     <div>
    <div className={`${styles.forgot_password} mt-30`}>
       <h2 className='mb-6 text text_type_main-medium'>Восстановление пароля</h2>
-      <div className={styles.input_section}>
+      <form className={styles.input_section} onSubmit={handleReset}>
         <EmailInput
           onChange={onChange}
           value={email}
@@ -38,10 +43,10 @@ const ForgotPassword:FC = () => {
         />
 
         <Button
-          htmlType={'button'}
+          htmlType={'submit'}
           extraClass='mb-20'
           size='medium'
-          onClick={handleReset}
+          disabled={isLoading}
         >Восстановить</Button>
 
         <div>
@@ -52,7 +57,7 @@ const ForgotPassword:FC = () => {
             Войти
           </NavLink>
         </div>
-      </div>
+      </form>
 
     </div>
     </div>

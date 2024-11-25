@@ -12,7 +12,8 @@ const ResetPassword: FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (!location.state || !location.state.fromForgotPassword) {
+    console.log('Location State:', location.state);
+    if (!location.state?.fromForgotPassword) {
       navigate('/forgot-password');
     }
   }, [location, navigate]);
@@ -25,10 +26,12 @@ const ResetPassword: FC = () => {
     setToken(e.target.value);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (event: React.FormEvent) => {
+    event.preventDefault();
     try {
       await saveNewPassword({ password, token }).unwrap();
       console.log("Пароль успешно обновлен!");
+      navigate('/login', { state: { fromResetPassword: true } });
     } catch {
       console.log("Не удалось обновить пароль. Проверьте данные и попробуйте снова.");
     }
@@ -67,6 +70,12 @@ const ResetPassword: FC = () => {
           {isError && (
             <span className="text text_type_main-small text_color_error">
               Ошибка сохранения пароля. Проверьте данные.
+            </span>
+          )}
+
+          {isSuccess && (
+            <span className="text text_type_main-small text_color_success">
+              Пароль успешно обновлен. Вы можете войти.
             </span>
           )}
 

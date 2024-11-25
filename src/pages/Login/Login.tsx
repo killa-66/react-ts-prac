@@ -6,12 +6,15 @@ import {
   PasswordInput,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useLoginMutation } from '../../services/userApi';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const Login: FC = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,6 +32,13 @@ const Login: FC = () => {
       console.error('Ошибка авторизации:', error);
     }
   };
+
+  if (isAuthenticated) {
+    const from = location.state?.from?.pathname || '/';
+    return (
+        <Navigate to={from} replace />
+    );
+}
 
   return (
     <div className={`${styles.login} mt-30`}>
