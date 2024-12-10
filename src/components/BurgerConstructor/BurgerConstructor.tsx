@@ -10,10 +10,13 @@ import Modal from '../Modal/Modal';
 import styles from './BurgerConstructor.module.scss';
 import ConstructorIngredient from './ConstructorIngredient/ConstructorIngredient';
 import OrderDetails from './OrderDetails/OrderDetails';
+import { useNavigate } from 'react-router-dom';
 
 const BurgerConstructor: FC = () => {
+  const navigate = useNavigate();
   const [compliteOrder] = useCompliteOrderMutation();
   const { bun, otherIngredients } = useSelector((state: RootState) => state.constructorIngredients);
+  const token = useSelector((state: RootState) => state.user.accessToken);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderData, setOrderData] = useState<IOrderResponse>();
   const dispatch = useDispatch();
@@ -39,8 +42,14 @@ const BurgerConstructor: FC = () => {
   }, [bun, otherIngredients]);
 
   const handleOrder = async () => {
+    if (!token) {
+      navigate('/login', { state: { from: '/' } });
+      return;
+    }
+
     const ingredientIds = [bun?._id, ...otherIngredients.map((ingredient) => ingredient._id)]
       .filter((id): id is string => id !== undefined);
+
     try {
       const response = await compliteOrder({ ingredients: ingredientIds });
       setOrderData(response.data);

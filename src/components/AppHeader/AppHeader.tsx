@@ -7,6 +7,7 @@ import {
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './AppHeader.module.scss';
+import { NavLink } from 'react-router-dom';
 
 const AppHeader: FC = () => {
   return (
@@ -19,7 +20,15 @@ const AppHeader: FC = () => {
               htmlType='button'
               type={'secondary'}
               extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}>
-              Конструктор
+              <NavLink
+                to={'/'}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${styles.header_link} ${styles.header_link_active}`
+                    : `${styles.header_link} text_color_inactive`
+                }>
+                Конструктор
+              </NavLink>
             </Button>
           </li>
           <li className={styles.menu_item}>
@@ -28,7 +37,15 @@ const AppHeader: FC = () => {
               htmlType='button'
               type={'secondary'}
               extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}>
-              Лента заказов
+              <NavLink
+                to={'/orders-line'}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${styles.header_link} ${styles.header_link_active}`
+                    : `${styles.header_link} text_color_inactive`
+                }>
+                Лента заказов
+              </NavLink>
             </Button>
           </li>
         </ul>
@@ -44,7 +61,15 @@ const AppHeader: FC = () => {
           htmlType='button'
           type={'secondary'}
           extraClass={`${styles.button_header} pb-2 pt-2 pl-4 pr-4`}>
-          Личный кабинет
+          <NavLink
+            to={'/profile'}
+            className={({ isActive }) =>
+              isActive
+                ? `${styles.header_link} ${styles.header_link_active}`
+                : `${styles.header_link} text_color_inactive`
+            }>
+            Личный кабинет
+          </NavLink>
         </Button>
       </div>
     </header>
